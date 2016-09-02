@@ -18,3 +18,9 @@ class Date
     weekends? or japan_national_holiday? ? true : false
   end
 end
+
+class Abc
+ def test
+   p "test"
+ end
+end
