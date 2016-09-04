@@ -1,8 +1,10 @@
+require 'yahoo-finance.rb'
+
 namespace :trade do
   desc "デイトレード用タスク"
 
   task :get => :environment do
-    stocks = Stock.all
-    p stocks
+    aaa = YahooFinanceStock.new
+    aaa.all_get
   end
 end
