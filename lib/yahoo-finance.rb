@@ -22,13 +22,19 @@ class YahooFinanceStock
     }
   end
 
-  def oder
-    @session.visit "https://www.rakuten-sec.co.jp/smartphone/login.html"
+  def order
+    @session.visit "https://www.rakuten-sec.co.jp"
     @session.fill_in 'loginid', :with => 'VVJN6362'
     @session.fill_in 'passwd', :with => 'ZQVK0658'
     @session.save_screenshot 'screenshot.png'
     @session.click_button 'ログイン'
     @session.save_screenshot 'screenshot2.png'
+    @session.fill_in 'search-stock-01', :with => '4689'
+    @session.click_button 'searchStockFormSearchBtn'
+    @session.save_screenshot 'screenshot3.png'
+    @session.find("#auto_update_field_info_jp_stock_price > tbody > tr > td:nth-child(1) > form:nth-child(4) > div.lyt-stock-price.clearfix > table:nth-child(1) > tbody > tr > td:nth-child(2) > div > div.box-action.clearfix > table > tbody > tr > td:nth-child(1) > ul.list-spot-trade-jp.roll > li:nth-child(1) > a > img").click
+
+    @session.save_screenshot 'screenshot4.png'
   end
 end
 

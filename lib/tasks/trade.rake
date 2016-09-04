@@ -8,8 +8,8 @@ namespace :trade do
     aaa.all_get
   end
 
-  task :oder => :environment do
+  task :order => :environment do
     aaa = YahooFinanceStock.new
-    aaa.oder
+    aaa.order
   end
 end
