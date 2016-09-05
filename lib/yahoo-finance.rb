@@ -9,23 +9,26 @@ class YahooFinanceStock
   end
 
   def all_get
-    stocks = Stock.all
-    stocks.map { |stock| 
-      @session.visit "http://stocks.finance.yahoo.co.jp/stocks/detail/?code=#{stock.code}.T"
-      Rails.logger.info  @session.status_code
-      puts current = @session.find('#stockinf > div.stocksDtl.clearFix > div.forAddPortfolio > table > tbody > tr > td:nth-child(3)').text
-      puts high = @session.find('#detail > div.innerDate > div:nth-child(3) > dl > dd > strong').text
-      puts low = @session.find('#detail > div.innerDate > div:nth-child(4) > dl > dd > strong').text
+    loop {
+	    stocks = Stock.all
+	    stocks.map { |stock| 
+	      @session.visit "http://stocks.finance.yahoo.co.jp/stocks/detail/?code=#{stock.code}.T"
+	      Rails.logger.info  @session.status_code
+	      puts current = @session.find('#stockinf > div.stocksDtl.clearFix > div.forAddPortfolio > table > tbody > tr > td:nth-child(3)').text
+	      puts high = @session.find('#detail > div.innerDate > div:nth-child(3) > dl > dd > strong').text
+	      puts low = @session.find('#detail > div.innerDate > div:nth-child(4) > dl > dd > strong').text
 
-      price = [ current , high ,low ].map { |c| c.delete(",") }
-      #当日のデータがあるかどうかを判定
-      if stock.prices.exists?(:date => Date.today) 
-        #Break outしたらオーダー
-        #エントリー金額を追記
-        #self.order if price[0].to_f > stock.prices.where(:date => Date.today).first.high 
-      else
-        stock.prices.create(:date => Date.today, :current.to_f => price[0], :high.to_f => price[1], :low.to_f => price[2])
-      end
+	      price = [ current , high ,low ].map { |c| c.delete(",") }
+	      #当日のデータがあるかどうかを判定
+	      if stock.prices.exists?(:date => Date.today) 
+		#Break outしたらオーダー
+		#エントリー金額を追記
+		#self.order if price[0].to_f > stock.prices.where(:date => Date.today).first.high 
+	      else
+		stock.prices.create(:date => Date.today, :current.to_f => price[0], :high.to_f => price[1], :low.to_f => price[2])
+	      end
+	    }
+      sleep 10
     }
   end
 
