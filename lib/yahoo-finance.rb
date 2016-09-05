@@ -18,7 +18,14 @@ class YahooFinanceStock
       puts low = @session.find('#detail > div.innerDate > div:nth-child(4) > dl > dd > strong').text
 
       price = [ current , high ,low ].map { |c| c.delete(",") }
-      stock.prices.create(:date => Date.today, :current => price[0], :high => price[1], :low => price[2])
+      #当日のデータがあるかどうかを判定
+      if stock.prices.exists?(:date => Date.today) 
+        #Break outしたらオーダー
+        #エントリー金額を追記
+        #self.order if price[0].to_f > stock.prices.where(:date => Date.today).first.high 
+      else
+        stock.prices.create(:date => Date.today, :current.to_f => price[0], :high.to_f => price[1], :low.to_f => price[2])
+      end
     }
   end
 
