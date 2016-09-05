@@ -6,6 +6,7 @@ class YahooFinanceStock
       Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 1000 })
     end
     @session = Capybara::Session.new(:poltergeist)
+    @auth_info = YAML.load(File.open("#{Rails.root}/config/auth.yml"))
   end
 
   def all_get
@@ -34,8 +35,8 @@ class YahooFinanceStock
 
   def order
     @session.visit "https://www.rakuten-sec.co.jp"
-    @session.fill_in 'loginid', :with => 'VVJN6362'
-    @session.fill_in 'passwd', :with => 'ZQVK0658'
+    @session.fill_in 'loginid', :with => @auth_info['id']
+    @session.fill_in 'passwd', :with => @auth_info['pass']
     @session.save_screenshot 'screenshot.png'
     @session.click_button 'ログイン'
     @session.save_screenshot 'screenshot2.png'
