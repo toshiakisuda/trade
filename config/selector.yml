@@ -1,0 +1,7 @@
+#yahoo selector
+current: '#stockinf > div.stocksDtl.clearFix > div.forAddPortfolio > table > tbody > tr > td:nth-child(3)'
+high: '#detail > div.innerDate > div:nth-child(3) > dl > dd > strong'
+low: '#detail > div.innerDate > div:nth-child(4) > dl > dd > strong'
+
+#rakuten
+buy: '#auto_update_field_info_jp_stock_price > tbody > tr > td:nth-child(1) > form:nth-child(4) > div.lyt-stock-price.clearfix > table:nth-child(1) > tbody > tr > td:nth-child(2) > div > div.box-action.clearfix > table > tbody > tr > td:nth-child(1) > ul.list-spot-trade-jp.roll > li:nth-child(1) > a > img'
