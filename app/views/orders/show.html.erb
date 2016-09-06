@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Stock:</strong>
+  <%= @order.stock_id %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @order.date %>
+</p>
+
+<p>
+  <strong>Buy:</strong>
+  <%= @order.buy %>
+</p>
+
+<p>
+  <strong>Sell:</strong>
+  <%= @order.sell %>
+</p>
+
+<p>
+  <strong>Volume:</strong>
+  <%= @order.volume %>
+</p>
+
+<%= link_to 'Edit', edit_order_path(@order) %> |
+<%= link_to 'Back', orders_path %>

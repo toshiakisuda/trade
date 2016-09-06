@@ -10,6 +10,6 @@ namespace :trade do
 
   task :order => :environment do
     aaa = YahooFinanceStock.new
-    aaa.order
+    aaa.order "3697", "1391"
   end
 end
