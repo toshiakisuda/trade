@@ -7,10 +7,12 @@
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:stock_id) %></th>
+      <th><%= model_class.human_attribute_name("社名") %></th>
       <th><%= model_class.human_attribute_name(:date) %></th>
       <th><%= model_class.human_attribute_name(:buy) %></th>
       <th><%= model_class.human_attribute_name(:sell) %></th>
       <th><%= model_class.human_attribute_name(:volume) %></th>
+      <th><%= model_class.human_attribute_name("結果") %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -20,10 +22,12 @@
       <tr>
         <td><%= link_to order.id, order_path(order) %></td>
         <td><%= order.stock_id %></td>
+        <td><%= link_to order.stock_name, "http://stocks.finance.yahoo.co.jp/stocks/detail/?code=#{order.stock_code}" %></td>
         <td><%= order.date %></td>
         <td><%= order.buy %></td>
         <td><%= order.sell %></td>
         <td><%= order.volume %></td>
+        <td><%= order.result_trade %></td>
         <td><%=l order.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

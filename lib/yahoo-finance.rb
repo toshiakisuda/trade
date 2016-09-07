@@ -12,7 +12,7 @@ class YahooFinanceStock
 
   def all_get
     loop {
-      if Time.now > Time.local(2016,9,7,9,30)
+      if Time.now > Time.parse(Date.today.to_s + " 09:30") && Time.now < Time.parse(Date.today.to_s + " 11:30") 
         stocks = Stock.all
         stocks.map { |stock| 
         price = get_prices(stock)
@@ -38,7 +38,7 @@ class YahooFinanceStock
                 stock.orders.where(:date => Date.today).first.update(:sell => price[0])
               else
                 #前場が終わったら売り
-                Rails.logger.info "sell #{price[0]}" if Time.now< Time.local(2016,9,7,11,30)
+                stock.orders.where(:date => Date.today).first.update(:sell => price[0]) if Time.now > Time.parse(Date.today.to_s + " 11:30")
                 #stock.orders.where(:date => Date.today).first.update(:sell => price[0])
               end
             end
