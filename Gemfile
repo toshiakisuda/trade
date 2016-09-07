@@ -41,6 +41,13 @@ gem 'poltergeist'
 gem 'rails-i18n'
 gem 'daemon-spawn', :require => 'daemon_spawn'
 
+# Bootstrap
+gem 'less-rails'
+gem 'therubyracer'
+gem 'execjs'
+gem 'twitter-bootstrap-rails'
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

@@ -42,4 +42,16 @@ Rails.application.configure do
   # Rails logger formatter
   config.logger = Logger.new(config.paths["log"].first)
   config.logger.formatter = Logger::Formatter.new
+
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+    :address => 'smtp.gmail.com',:port => '587',
+    :domain => 'smtp.gmail.com',
+    :user_name => 'toshiaki.suda@gmail.com',
+    :password => 'txdwziatwkryetao',
+    :authentication => :login,
+    :enable_starttls_auto => true
+}
 end

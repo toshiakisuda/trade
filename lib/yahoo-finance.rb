@@ -15,29 +15,39 @@ class YahooFinanceStock
       if Time.now > Time.local(2016,9,7,9,30)
         stocks = Stock.all
         stocks.map { |stock| 
-          price = get_prices(stock)
-          #当日のデータがあるかどうかを判定
-          if stock.prices.exists?(:date => Date.today) 
-            #Break outしたらオーダー
-            #エントリー金額を追記
-            if stock.orders.where(:date => Date.today).blank?
-              if price[0].to_f > stock.prices.where(:date => Date.today).first.high
-                stock.prices.create(:date => Date.today,:buy => price[0],:volume => 100)
-                Rails.logger.info "entry #{price[0]}"
-                self.order stock.code, price[0]
-              end
-            else
-              if stock.orders.where(:date => Date.today).first * 1.01 > price[0]
-                Rails.logger.info "sell #{price[0]}"
-                stock.prices.where(:date => Date.today).first.update(:sell => price[0])
-              end
-              Rails.logger.info "sell #{price[0]}" if Time.now< Time.local(2016,9,7,11,30)
-              stock.prices.where(:date => Date.today).first.update(:sell => price[0])
+        price = get_prices(stock)
+        #当日のデータがあるかどうかを判定
+        if stock.prices.exists?(:date => Date.today) 
+          #Break outしたらオーダー
+          #エントリー金額を追記1
+          #if stock.orders.today_blank?
+          if stock.orders.where(:date => Date.today).blank?
+            #if price[0].to_f > stock.prices.today_high
+            if price[0].to_f > stock.prices.where(:date => Date.today).first.high
+              stock.orders.create(:date => Date.today,:buy => price[0].to_f,:volume => 100)
+              Rails.logger.info "entry #{price[0]}"
+              self.order stock.code, price[0]
             end
           else
-            stock.prices.create(:date => Date.today, :current => price[0].to_f, :high => price[1].to_f, :low => price[2].to_f)
+            if stock.orders.where(:date => Date.today).where(:sell => nil)
+              #購入金額より1%以上高くなったら売り
+              #if stock.orders.today * 1.01 > price[0]
+              p kitai = stock.orders.where(:date => Date.today).first.buy * 1.01
+              if price[0].to_f > kitai
+                Rails.logger.info "sell #{price[0]}"
+                stock.orders.where(:date => Date.today).first.update(:sell => price[0])
+              else
+                #前場が終わったら売り
+                Rails.logger.info "sell #{price[0]}" if Time.now< Time.local(2016,9,7,11,30)
+                #stock.orders.where(:date => Date.today).first.update(:sell => price[0])
+              end
+            end
           end
-         }
+        else
+          #基準値の取得
+          stock.prices.create(:date => Date.today, :current => price[0].to_f, :high => price[1].to_f, :low => price[2].to_f)
+        end
+       }
       else
         Rails.logger.info Time.now.to_s + ":まだ実行しませんよー"
       end
