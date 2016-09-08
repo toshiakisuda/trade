@@ -5,7 +5,8 @@ RSpec.describe NoticeMailer, type: :mailer do
     let(:mail) { NoticeMailer.sendmail_confirm }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Sendmail confirm")
+      #expect(mail.subject).to eq("Sendmail confirm")
+      expect(mail.subject).to eq("通知だよ")
       expect(mail.to).to eq(["to@example.org"])
       expect(mail.from).to eq(["from@example.com"])
     end

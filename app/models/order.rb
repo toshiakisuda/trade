@@ -10,11 +10,13 @@ class Order < ActiveRecord::Base
   end
 
   def stock_name
-    Stock.where(:id => self.stock_id).first.name
+    p stock = Stock.where(:id => self.stock_id).first
+    stock.name
   end
 
   def stock_code
-    Stock.where(:id => self.stock_id).first.code
+    stock = Stock.where(:id => self.stock_id).first
+    stock.code
   end
 
   def result_trade

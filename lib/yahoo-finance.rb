@@ -49,6 +49,10 @@ class YahooFinanceStock
                         :low => low.to_f) if stock.prices.exists?(:date => Date.today)
   end
 
+  def breakout?
+
+  end
+
   def market_time?
     if Time.now > Time.parse(Date.today.to_s + " 09:30") && Time.now < Time.parse(Date.today.to_s + " 11:30") 
       Rails.logger.info "Market Time!"
