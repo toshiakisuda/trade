@@ -15,7 +15,7 @@ class YahooFinanceStock
     stocks.map { |stock| 
       price = get_prices(stock)
       #当日のデータがあるかどうかを判定
-      reference_price(stock, price[0], price[1], price[2])
+      reference_price(stock, price[0], price[1], price[2]) if stock.today_blank?
       #Break outしたらオーダー
       if stock.orders.where(:date => Date.today).blank?
         #if price[0].to_f > stock.prices.today_high
