@@ -7,7 +7,6 @@ class MyServer < DaemonSpawn::Base
   def start(args)
     @aaa = YahooFinanceStock.new
     loop {
-      Rails.logger.info "hello"
       @aaa.all_get if @aaa.market_time?
       sleep 10
     }

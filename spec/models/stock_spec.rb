@@ -10,7 +10,7 @@ RSpec.describe Stock, type: :model do
   describe 'Stock method' do
     context '当日のpriceレコードチェック' do
       it "１件もない場合、trueとなること" do
-        stock = Stock.where(:id => 2).first
+        stock = Stock.find_by(:id => 2)
         expect(stock.today_blank?).to eq true
       end
 

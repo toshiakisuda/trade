@@ -1,27 +1,38 @@
 require 'capybara/poltergeist'
 
-class browserContral 
+class BrowserContral 
   def initialize
+    @MAX_RETRY = 3
     Capybara.register_driver :poltergeist do |app|
-      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10 })
+      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10,:phantomjs_options => ["--proxy=tprx.jtoa:80"] })
     end
+    
     @session = Capybara::Session.new(:poltergeist)
     @auth_info = YAML.load(File.open("#{Rails.root}/config/auth.yml"))
     @selector = YAML.load(File.open("#{Rails.root}/config/selector.yml"))
   end
 
   def get(stock)
+    cnt_retry = 0
     begin
       @session.visit "http://stocks.finance.yahoo.co.jp/stocks/detail/?code=#{stock.code}.T"
-      prices.store("current",@session.find(@selector['current']).text)
-      prices.store("high",@session.find(@selector['high']).text)
-      prices.store("low",@session.find(@selector['low']).text)
+      prices = {
+                 "current" => @session.find(@selector['current']).text,
+                 "high" => @session.find(@selector['high']).text,
+                 "low" => @session.find(@selector['low']).text
+               } 
       prices.map { |key,val| [key,val.delete(",")] }.to_h
       Rails.logger.info "現在値:#{stock.name},#{stock.code},#{prices['current']},#{prices['high']},#{prices['low']}"
       prices 
-    resucue => e
-      Rails.logger.error "#{e.class},#{e.messages}"
+    rescue => e
+      cnt_retry += 1
+      Rails.logger.error "#{e.class},#{e.message},retry=#{cnt_retry}"
       screenshot
+      if cnt_retry < @MAX_RETRY
+        sleep 1
+        retry
+      end
+      @cnt_retry = 0
     end
   end
 
@@ -32,7 +43,7 @@ class browserContral
       @session.fill_in 'passwd', :with => @auth_info['pass']
       @session.click_button 'ログイン'
     rescue => e
-      Rails.logger.error "#{e.class},#{e.messages}"
+      Rails.logger.error "#{e.class},#{e.message}"
       screenshot
     end
   end
@@ -49,7 +60,7 @@ class browserContral
       @session.fill_in 'password', :with => @auth_info['password']
       @session.click_on 'ormit_sbm'
     rescue => e
-      Rails.logger.error "#{e.class},#{e.messages}"
+      Rails.logger.error "#{e.class},#{e.message}"
       screenshot
     end
   end

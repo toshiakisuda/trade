@@ -2,7 +2,7 @@ class Order < ActiveRecord::Base
   belongs_to :stock
 
   def today
-    self.where(:date => Date.today).first
+    self.find_by(:date => Date.today)
   end
 
   def today_blank?
@@ -10,12 +10,12 @@ class Order < ActiveRecord::Base
   end
 
   def stock_name
-    p stock = Stock.where(:id => self.stock_id).first
+    stock = Stock.find_by(:id => self.stock_id)
     stock.name
   end
 
   def stock_code
-    stock = Stock.where(:id => self.stock_id).first
+    stock = Stock.find_by(:id => self.stock_id)
     stock.code
   end
 
