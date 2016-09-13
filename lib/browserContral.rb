@@ -3,13 +3,20 @@ require 'capybara/poltergeist'
 class BrowserContral 
   def initialize
     @MAX_RETRY = 3
+    @selector = YAML.load(File.open("#{Rails.root}/config/selector.yml"))
+    @auth_info = YAML.load(File.open("#{Rails.root}/config/auth.yml"))
     Capybara.register_driver :poltergeist do |app|
-      Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10,:phantomjs_options => ["--proxy=tprx.jtoa:80"] })
+      if @auth_info['proxy'] 
+        Capybara::Poltergeist::Driver.new(app, {:js_errors => false, 
+                                          :timeout => 10,
+                                          :phantomjs_options => ["--proxy=#{@auth_info['proxy']}"] }
+                                         )
+      else
+        Capybara::Poltergeist::Driver.new(app, {:js_errors => false, :timeout => 10})
+      end
     end
     
     @session = Capybara::Session.new(:poltergeist)
-    @auth_info = YAML.load(File.open("#{Rails.root}/config/auth.yml"))
-    @selector = YAML.load(File.open("#{Rails.root}/config/selector.yml"))
   end
 
   def get(stock)
@@ -17,11 +24,10 @@ class BrowserContral
     begin
       @session.visit "http://stocks.finance.yahoo.co.jp/stocks/detail/?code=#{stock.code}.T"
       prices = {
-                 "current" => @session.find(@selector['current']).text,
-                 "high" => @session.find(@selector['high']).text,
-                 "low" => @session.find(@selector['low']).text
+                 "current" => @session.find(@selector['current']).text.delete(","),
+                 "high" => @session.find(@selector['high']).text.delete(","),
+                 "low" => @session.find(@selector['low']).text.delete(",")
                } 
-      prices.map { |key,val| [key,val.delete(",")] }.to_h
       Rails.logger.info "現在値:#{stock.name},#{stock.code},#{prices['current']},#{prices['high']},#{prices['low']}"
       prices 
     rescue => e
