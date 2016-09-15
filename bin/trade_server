@@ -19,7 +19,7 @@ class MyServer < DaemonSpawn::Base
   end
 end
 
-MyServer.spawn!(:log_file => '/var/log/trade_server.log',
-                :pid_file => '/var/run/trade_server.pid',
+MyServer.spawn!(:log_file => "#{Rails.root}/log/trade_server.log",
+                :pid_file => "#{Rails.root}/log/trade_server.pid",
                 :sync_log => true,
                 :working_dir => File.dirname(__FILE__))
