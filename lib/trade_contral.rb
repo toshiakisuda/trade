@@ -9,6 +9,7 @@ class TradeContral
     stocks = Stock.all
     stocks.each { |stock|
       price = @browser.get(stock)
+      @browser.buy if stock.order0930(price)
     } 
   end
 end 
