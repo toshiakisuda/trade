@@ -7,3 +7,4 @@ git clone https://github.com/toshiakisuda/trade.git
 cd trade
 bundle install --path vendor/bundler
 rake db:migrate
+rake db:seed

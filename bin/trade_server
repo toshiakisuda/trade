@@ -1,13 +1,14 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../config/application', __FILE__)
 require 'yahoo-finance.rb'
+require 'holiday.rb'
 Rails.application.require_environment!
 
 class MyServer < DaemonSpawn::Base
   def start(args)
-    @aaa = YahooFinanceStock.new
+    trade = TradeContral.new
     loop {
-      @aaa.all_get if @aaa.market_time?
+      trade.process if Time.trade_session_at_now? 
       sleep 10
     }
     # process command-line args

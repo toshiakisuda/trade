@@ -8,7 +8,7 @@ class TradeContral
   def process
     stocks = Stock.all
     stocks.each { |stock|
-      p @browser.get(stock)
+      price = @browser.get(stock)
     } 
   end
 end 

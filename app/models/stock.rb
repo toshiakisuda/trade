@@ -5,5 +5,4 @@ class Stock < ActiveRecord::Base
   def today_blank?
     self.prices.where(:date => Date.today).blank?
   end
-
 end

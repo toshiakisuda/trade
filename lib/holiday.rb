@@ -1,6 +1,11 @@
 require 'yaml'
 
 class Time
+  def self.trade_session_at_now?
+    time = Time.now
+    time.trade_session?
+  end
+
   def trade_session?
     (self.morning_session? or after_session?) and !self.holiday?  ? true : false  
   end
