@@ -22,7 +22,7 @@ RSpec.describe Stock, type: :model do
       it "当日のデータがない場合は初回データを登録" do
          stock = Stock.find_by(:id => 2)
          price = { 'high' => 100, 'low' => 10, 'current' => 50}
-         stock.order0930(price)
+         stock.timing_order(Time.now,price)
 
          pstock = stock.prices.find_by(:date => Date.today)
          expect(pstock.high).to eq 100
@@ -30,13 +30,13 @@ RSpec.describe Stock, type: :model do
          expect(pstock.current).to eq 50 
 
          price = { 'high' => 100, 'low' => 10, 'current' => 101}
-         stock.order0930(price)
+         stock.timing_order(Time.now,price)
          ostock = stock.orders.find_by(:date => Date.today)
          expect(ostock.buy).to eq 101
          expect(ostock.sell).to eq nil
 
          price = { 'high' => 100, 'low' => 10, 'current' => 110}
-         stock.order0930(price)
+         stock.timing_order(Time.now,price)
          ostock = stock.orders.find_by(:date => Date.today)
          expect(ostock.sell).to eq 110
       end

@@ -11,7 +11,9 @@ class Stock < ActiveRecord::Base
     stock.high
   end
 
-  def order0930(price)
+  def timing_order(start_time,price)
+    return false if start_time > Time.now
+
     self.prices.create(:date => Date.today, :high => price['high'], 
                        :low => price['low'], :current => price['current']) if self.today_blank?
 
@@ -19,10 +21,13 @@ class Stock < ActiveRecord::Base
       if self.orders.where(:date => Date.today).exists?
         if price['current'] > self.orders.find_by(:date => Date.today).buy * 1.01
           self.orders.find_by(:date => Date.today).update(:sell => price['current'],:volume => 100) 
+          return "sell"
         end
       else
         self.orders.create(:date => Date.today, :buy => price['current'], :volume => 100) 
+        return "buy"
       end
     end
+    return false
   end
 end
