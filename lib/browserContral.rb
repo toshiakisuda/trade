@@ -74,6 +74,21 @@ class BrowserContral
   def sell
   end
 
+  def get_nikkei_futures
+   cnt_retry = 0
+   begin
+     #マネックス
+   rescue => e
+     cnt_retry += 1
+     Rails.logger.error "#{e.class},#{e.message},retry=#{cnt_retry}"
+     screenshot
+     if cnt_retry < @MAX_RETRY
+       sleep 1
+       retry
+     end
+   end
+  end
+
   def screenshot
     str = Time.now.strftime("%Y%m%d%H%M%S")
     @session.save_screenshot("#{Rails.root}/tmp/#{str}.png")
