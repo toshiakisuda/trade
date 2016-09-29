@@ -9,7 +9,7 @@ class TradeContral
     stocks = Stock.all
     stocks.each { |stock|
       price = @browser.get(stock)
-      stock.timeing_order(Time.now.change(:hour => 9,:min => 30),price)
+      stock.timing_order(Time.now.change(:hour => 9,:min => 30),price)
     } 
   end
 end
