@@ -1,10 +1,11 @@
 #! /bin/bash
 
-if [ -n $https_proxy]; then
+if [ $(grep proxy ../share/auth.yml) ]; then
   export https_proxy=http://tprx.jtoa:80
   export http_proxy=http://tprx.jtoa:80
 fi
 
+bundle exec spring stop
 cd ../
 DATE=$(date +'%Y%m%d')
 mv trade trade.$DATE
